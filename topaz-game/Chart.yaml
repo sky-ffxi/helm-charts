@@ -1,0 +1,6 @@
+apiVersion: v2
+name: topaz-game
+description: A helm chart for installing topaz game.
+type: application
+version: 0.0.1
+appVersion: 0.0.1

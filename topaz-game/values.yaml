@@ -1,0 +1,127 @@
+replicaCount: 1
+timezone: America/New_York
+
+image:
+  repository: skyffxi/topaz-game
+  pullPolicy: Always
+  tag: latest
+
+service:
+  type: ClusterIP
+  ports:
+    game: 31230
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+config:
+  timestampFormat: "[%d/%b] [%H:%M:%S]"
+  consoleVerbosity: 0
+  packets:
+    buffMaxSize: 1750
+    maxTimeLastUpdate: 60
+    packetGuardEnabled: 0
+    debugUDP: no
+  game:
+    lightLuggageBlock: 4
+    auctionHouse:
+      baseFeeSingle: 1
+      baseFeeStacks: 4
+      taxRateSingle: 1.0
+      taxRateStacks: 0.5
+      maxFee: 10000
+      listingLimit: 7
+    exp:
+      gainRate: 1.0
+      lossRate: 1.0
+      partyGapPenalties: 1
+      deathRetention: 0
+      lossLevel: 31
+    vanadielTimeEpoch: 0
+    fameMultiplier: 1.00
+    levelSync:
+      enabled: 1
+      disableGearScaling: 0
+    allJobsHaveWideScan: 1
+    speedModifiers:
+      walking: 0
+      mounts: 0
+      mobs: 0
+    crafting:
+      skillupChanceMultiplier: 1.0
+      skillupAmountMultiplier: 1
+      craftChanceMultiplier: 1.0
+      craftAmountMultiplier: 1
+      commonCap: 700
+      specializationPoints: 400
+    gardening:
+      dayMatters: 0
+      moonphaseMatters: 0
+      potMatters: 0
+      moghouseAuraMatters: 0
+    bloodpact:
+      skillupsEnabled: 1
+      sharedTimer: 0
+    subjob:
+      mpDivisor: 2.0
+      ratio: 1
+      includeMonstersInRatio: 0
+    player:
+      tpGainMultiplier: 1.0
+      hpMultiplier: 1.0
+      mpMultiplier: 1.0
+      statsMultiplier: 1.0
+      abilities:
+        recastMultiplier: 1.0
+      skillups:
+        style: 7
+      meritPoints:
+        max: 30
+      healingTickDelay: 10
+    mobs:
+      dropRateMultiplier: 1.0
+      gilMultiplier: 1.0
+      gilBonus: 0
+      maxGilBonus: 9999
+      tpGainMultiplier: 1.0
+      hpMultiplier: 1.0
+      mpMultiplier: 1.0
+      statsMultiplier: 1.0
+      noDespawn: 0
+    nms:
+      hpMultiplier: 1.0
+      mpMultiplier: 1.0
+      statsMultiplier: 1.0
+    battlefield:
+      levelCapTweak: 0
+      levelCapMissionBCNM: 0
+    yellCooldownSeconds: 30
+    auditing:
+      gmCommands: 0
+      chat: 0
+      say: 0
+      shout: 0
+      tell: 0
+      yell: 0
+      linkshell: 0
+      party: 0
+  ports:
+    game: 54230
+  message:
+    host: "127.0.0.1"
+    port: 54003
+  database:
+    host: localhost
+    port: 3306
+    username: root
+    password: root
+    name: skyffxi
+  welcomeMessage: |
+    Please visit https://github.com/skyffxi/topaz for the latest information on the project.
+    Do not hesitate to join us on Discord! https://discord.gg/nbYJfA5
+    Thank you, and we hope you enjoy SkyFFXI!

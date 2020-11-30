@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "topazGame.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - name: game
+    port: {{ .Values.service.ports.game }}
+    targetPort: game
+  selector:
+    {{- include "topazGame.selectorLabels" . | nindent 4 }}

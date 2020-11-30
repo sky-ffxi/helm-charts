@@ -1,0 +1,258 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configs
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "topazGame.labels" . | nindent 4 }}
+data:
+
+  map.conf: |
+    #Topaz map server conf
+
+    #--------------------------------
+    #map server parameters
+    #--------------------------------
+
+    #map server port
+    map_port: {{ .Values.config.ports.game }}
+
+    #Time-stamp format which will be printed before all messages.
+    #Can at most be 20 characters long.
+    #Common formats:
+    # %I:%M:%S %p (hour:minute:second 12 hour, AM/PM format)
+    # %H:%M:%S (hour:minute:second, 24 hour format)
+    # %d/%b/%Y (day/Month/year)
+    #For full format information, consult the strftime() manual.
+    timestamp_format: {{ .Values.config.timestampFormat }}
+
+    #If redirected output contains escape sequences (color codes)
+    stdout_with_ansisequence: no
+
+    #Makes server output more silent by omitting certain types of messages:
+    #Standard     = 1
+    #Status       = 2
+    #Info         = 4
+    #Notice       = 8
+    #Warn         = 16
+    #Debug        = 32
+    #Error        = 64
+    #Fatal Error  = 128
+    #SQL          = 256
+    #Lua          = 512
+    #Navmesh      = 1024
+    #Action       = 2048
+    #Exploit      = 4096
+    #Example: "console_silent: 7" Hides standard, status and information messages (1+2+4)
+    console_silent: {{ .Values.config.consoleVerbosity }}
+
+    #--------------------------------
+    #SQL parameters
+    #--------------------------------
+
+    mysql_host:      {{ .Values.config.database.host }}
+    mysql_port:      {{ .Values.config.database.port }}
+    mysql_login:     {{ .Values.config.database.username }}
+    mysql_password:  {{ .Values.config.database.password }}
+    mysql_database:  {{ .Values.config.database.name }}
+
+    #--------------------------------
+    #Packet settings
+    #--------------------------------
+
+    buff_maxsize: {{ .Values.config.packets.buffMaxSize }}
+    max_time_lastupdate: {{ .Values.config.packets.maxTimeLastUpdate }}
+
+    #--------------------------------
+    #Game settings
+    #--------------------------------
+
+    # PacketGuard will block and report any packets that aren't in the allow-list for a
+    # player's current state.
+    packetguard_enabled: {{ .Values.config.packets.packetGuardEnabled }}
+
+    #Minimal number of 0x3A packets which uses for detect lightluggage (set 0 for disable)
+    lightluggage_block:   {{ .Values.config.game.lightLuggageBlock }}
+
+    # AH fee structure, defaults are retail.
+    ah_base_fee_single: {{ .Values.config.game.auctionHouse.baseFeeSingle }}
+    ah_base_fee_stacks: {{ .Values.config.game.auctionHouse.baseFeeStacks }}
+    ah_tax_rate_single: {{ .Values.config.game.auctionHouse.taxRateSingle }}
+    ah_tax_rate_stacks: {{ .Values.config.game.auctionHouse.taxRateStacks }}
+    ah_max_fee: {{ .Values.config.game.auctionHouse.maxFee }}
+
+    # Max open listings per player, 0 = no limit. (Default 7)
+    # Note: Settings over 7 may need client-side plugin to work under all circumstances.
+    ah_list_limit: {{ .Values.config.game.auctionHouse.listingLimit }}
+
+    #Misc EXP related settings
+    exp_rate: {{ .Values.config.game.exp.gainRate }}
+    exp_loss_rate: {{ .Values.config.game.exp.lossRate }}
+    exp_party_gap_penalties: {{ .Values.config.game.exp.partyGapPenalties }}
+
+    #Determines Vana'diel time epoch (886/1/1 Firesday)
+    # current timestamp - vanadiel_time_epoch = vana'diel time
+    # 0 defaults to SE epoch 1009810800 (JP midnight 1/1/2002)
+    #safe range is 1 - current timestamp
+    vanadiel_time_epoch: {{ .Values.config.game.vanadielTimeEpoch }}
+
+    #For old fame calculation use .25
+    fame_multiplier: {{ .Values.config.game.fameMultiplier }}
+
+    #Percentage of experience normally lost to keep upon death. 0 means full loss, where 1 means no loss.
+    exp_retain: {{ .Values.config.game.exp.deathRetention }}
+
+    #Minimum level at which experience points can be lost
+    exp_loss_level: {{ .Values.config.game.exp.lossLevel }}
+
+    #Enable/disable Level Sync
+    level_sync_enable: {{ .Values.config.game.levelSync.enabled }}
+
+    #Disables ability to equip higher level gear when level cap/sync effect is on player.
+    disable_gear_scaling: {{ .Values.config.game.levelSync.disableGearScaling }}
+
+    #Enable/disable jobs other than BST and RNG having widescan
+    all_jobs_widescan: {{ .Values.config.game.allJobsHaveWideScan }}
+
+    #Modifier to apply to player speed. 0 means default speed of 50, where 20 would mean speed 70 or -10 would mean speed 40.
+    speed_mod: {{ .Values.config.game.speedModifiers.walking }}
+
+    #Modifier to apply to mount speed. 0 means default speed of 80, where 20 would mean speed 100 or -20 would mean speed 60.
+    mount_speed_mod: {{ .Values.config.game.speedModifiers.mounts }}
+
+    #Modifier to apply to agro'd monster speed. 0 means default speed, where 20 would mean default speed + 20 or -10 would mean default speed - 10.
+    mob_speed_mod: {{ .Values.config.game.speedModifiers.mobs }}
+
+    #Allows you to manipulate the constant multiplier in the skill-up rate formulas, having a potent effect on skill-up rates.
+    skillup_chance_multiplier: {{ .Values.config.game.crafting.skillupChanceMultiplier }}
+    craft_chance_multiplier: {{ .Values.config.game.crafting.craftChanceMultiplier }}
+
+    #Multiplier for skillup amounts. Using anything above 1 will break the 0.5 cap, the cap will become 0.9 (For maximum, set to 5)
+    skillup_amount_multiplier: {{ .Values.config.game.crafting.skillupAmountMultiplier }}
+    craft_amount_multiplier: {{ .Values.config.game.crafting.craftAmountMultiplier }}
+
+    #Gardening Factors: DO NOT change defaults without verifiable proof that your change IS how retail does it. Myths need to be optional.
+    garden_day_matters: {{ .Values.config.game.gardening.dayMatters }}
+    garden_moonphase_matters: {{ .Values.config.game.gardening.moonphaseMatters }}
+    garden_pot_matters: {{ .Values.config.game.gardening.potMatters }}
+    garden_mh_aura_matters: {{ .Values.config.game.gardening.moghouseAuraMatters }}
+
+    #Craft level limit from witch specialization points beging to count. (Retail: 700; Level 75 era:600)
+    craft_common_cap: {{ .Values.config.game.crafting.commonCap }}
+
+    #Amount of points allowed in crafts over the level defined above. Points are shared across all crafting skills. (Retail: 400; All skills can go to max: 3200)
+    craft_specialization_points: {{ .Values.config.game.crafting.specializationPoints }}
+
+    #Enable/disable skill-ups from bloodpacts
+    skillup_bloodpact: {{ .Values.config.game.bloodpact.skillupsEnabled }}
+
+    #Adjust rate of TP gain for mobs and players. Acts as a multiplier, so default is 1.
+    mob_tp_multiplier:    {{ .Values.config.game.mobs.tpGainMultiplier }}
+    player_tp_multiplier: {{ .Values.config.game.player.tpGainMultiplier }}
+
+    #Adjust max HP pool for NMs, regular mobs, players. Acts as a multiplier, so default is 1.
+    nm_hp_multiplier:     {{ .Values.config.game.nms.hpMultiplier }}
+    mob_hp_multiplier:    {{ .Values.config.game.mobs.hpMultiplier }}
+    player_hp_multiplier: {{ .Values.config.game.player.hpMultiplier }}
+
+    #Adjust max MP pool for NMs, regular mobs, and players. Acts as a multiplier, so default is 1.
+    nm_mp_multiplier:     {{ .Values.config.game.nms.mpMultiplier }}
+    mob_mp_multiplier:    {{ .Values.config.game.mobs.mpMultiplier }}
+    player_mp_multiplier: {{ .Values.config.game.player.mpMultiplier }}
+
+    #Sets the fraction of MP a subjob provides to the main job. Retail is half and this acts as a divisor so default is 2
+    sj_mp_divisor: {{ .Values.config.game.subjob.mpDivisor }}
+
+    # Modify ratio of subjob-to-mainjob
+    # 0 = no subjobs
+    # 1 = 1/2   (default, 75/37, 99/49)
+    # 2 = 2/3   (75/50, 99/66)
+    # 3 = equal (75/75, 99/99)
+    subjob_ratio: {{ .Values.config.game.subjob.ratio }}
+
+    #Also adjust monsters subjob in ratio adjustments? 1= true / 0 = false
+    include_mob_sj: {{ .Values.config.game.subjob.includeMonstersInRatio }}
+
+    #Adjust base stats (str/vit/etc.) for NMs, regular mobs, and players. Acts as a multiplier, so default is 1.
+    nm_stat_multiplier:     {{ .Values.config.game.nms.statsMultiplier }}
+    mob_stat_multiplier:    {{ .Values.config.game.mobs.statsMultiplier }}
+    player_stat_multiplier: {{ .Values.config.game.player.statsMultiplier }}
+
+    #Adjust the recast time for abilities. Acts as a multiplier, so default is 1
+    ability_recast_multiplier: {{ .Values.config.game.player.abilities.recastMultiplier }}
+
+    #Enable/disable shared blood pact timer
+    blood_pact_shared_timer: {{ .Values.config.game.bloodpact.sharedTimer }}
+
+    #Adjust mob drop rate. Acts as a multiplier, so default is 1.
+    drop_rate_multiplier: {{ .Values.config.game.mobs.dropRateMultiplier }}
+
+    #Multiplier for gil naturally dropped by mobs. Does not apply to the bonus gil from all_mobs_gil_bonus. Default is 1.0.
+    mob_gil_multiplier: {{ .Values.config.game.mobs.gilMultiplier }}
+
+    #All mobs drop this much extra gil per mob LV even if they normally drop zero.
+    all_mobs_gil_bonus: {{ .Values.config.game.mobs.gilBonus }}
+
+    #Maximum total bonus gil that can be dropped. Default 9999 gil.
+    max_gil_bonus: {{ .Values.config.game.mobs.maxGilBonus }}
+
+    # Allow mobs to walk back home instead of despawning
+    mob_no_despawn: {{ .Values.config.game.mobs.noDespawn }}
+
+    #Allows parry, block, and guard to skill up regardless of the action occuring.
+    # Bin  Dec Note
+    # 0000 0   Classic
+    # 0001 1   Parry
+    # 0010 2   Block
+    # 0100 4   Guard
+    # 0111 7   Parry, Block, & Guard
+    newstyle_skillups: {{ .Values.config.game.player.skillups.style }}
+
+    #Globally adjusts ALL battlefield level caps by this many levels.
+    Battle_cap_tweak: {{ .Values.config.game.battlefield.levelCapTweak }}
+
+    #Enable/disable level cap of mission battlefields stored in database.
+    lv_cap_mission_bcnm: {{ .Values.config.game.battlefield.levelCapMissionBCNM }}
+
+    #Max allowed merits points players can hold
+    # 10 classic
+    # 30 abyssea
+    max_merit_points: {{ .Values.config.game.player.meritPoints.max }}
+
+    #Minimum time between uses of yell command (in seconds).
+    yell_cooldown: {{ .Values.config.game.yellCooldownSeconds }}
+
+    #Command Audit[logging] commands with lower permission than this will not be logged.
+    # Zero for no logging at all. Commands given to non GMs are not logged. Autotranslate is not parsed.
+    audit_gm_cmd: {{ .Values.config.game.auditing.gmCommands }}
+
+    #Todo: other logging including anti-cheat messages
+
+    #Chat Audit[logging] settings
+    audit_chat: {{ .Values.config.game.auditing.chat }}
+    audit_say: {{ .Values.config.game.auditing.say }}
+    audit_shout: {{ .Values.config.game.auditing.shout }}
+    audit_tell: {{ .Values.config.game.auditing.tell }}
+    audit_yell: {{ .Values.config.game.auditing.yell }}
+    audit_linkshell: {{ .Values.config.game.auditing.linkshell }}
+    audit_party: {{ .Values.config.game.auditing.party }}
+
+    #Seconds between healing ticks. Default is 10
+    healing_tick_delay: {{ .Values.config.game.player.healingTickDelay }}
+
+    #Central message server settings (ensure these are the same on both all map servers and the central (lobby) server
+    msg_server_port: {{ .Values.config.message.port }}
+    msg_server_ip: {{ .Values.config.message.host }}
+
+    #Set to 1 to enable server side anti-cheating measurements
+    #anticheat_enabled: 1
+    #Set to 1 to completely disable auto-jailing offenders
+    #anticheat_jail_disable: 0
+
+  server_message.conf: | {{ .Values.config.welcomeMessage | nindent 4 }}
+
+  packet_udp.conf: |
+    // Topaz tcp sockets Configuration file
+
+    // Display debug reports (When something goes wrong during the report, the report is saved.)
+    debug: {{ .Values.config.packets.debugUDP }}
