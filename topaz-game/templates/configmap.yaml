@@ -249,6 +249,10 @@ data:
     #Set to 1 to completely disable auto-jailing offenders
     #anticheat_jail_disable: 0
 
+    # Gobbie Mystery Box settings
+    daily_tally_amount: {{ .Values.config.game.gobbyMysteryBag.dailyTallyAmount }}
+    daily_tally_limit: {{ .Values.config.game.gobbyMysteryBag.dailyTallyLimit }}
+
   server_message.conf: | {{ .Values.config.welcomeMessage | nindent 4 }}
 
   packet_udp.conf: |

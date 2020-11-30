@@ -110,6 +110,9 @@ config:
       yell: 0
       linkshell: 0
       party: 0
+    gobbyMysteryBag:
+      dailyTallyAmount: 10
+      dailyTallyLimit: 50000
   ports:
     game: 54230
   message:
