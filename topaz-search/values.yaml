@@ -1,0 +1,33 @@
+replicaCount: 1
+timezone: America/New_York
+
+image:
+  repository: skyffxi/topaz-search
+  pullPolicy: Always
+  tag: latest
+
+service:
+  type: ClusterIP
+  ports:
+    search: 31002
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+config:
+  ports:
+    search: 54002
+  database:
+    host: localhost
+    port: 3306
+    username: root
+    password: root
+    name: skyffxi
+  expireAuctions: 1
+  expireDays: 3
+  expireInterval: 3600

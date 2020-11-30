@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "topazSearch.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - name: search
+    port: {{ .Values.service.ports.search }}
+    targetPort: search
+  selector:
+    {{- include "topazSearch.selectorLabels" . | nindent 4 }}

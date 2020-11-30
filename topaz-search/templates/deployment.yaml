@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "topazSearch.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "topazSearch.selectorLabels" . | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
+  minReadySeconds: 5
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "topazSearch.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: topaz-search
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: search
+          containerPort: {{ .Values.config.ports.search }}
+        env:
+        - name: TZ
+          value: {{ .Values.timezone | quote }}
+        - name: TPZ_DB_HOST
+          value: {{ .Values.config.database.host | quote }}
+        - name: TPZ_DB_PORT
+          value: {{ .Values.config.database.port | quote }}
+        - name: TPZ_DB_USER
+          value: {{ .Values.config.database.username | quote }}
+        - name: TPZ_DB_USER_PASSWD
+          value: {{ .Values.config.database.password | quote }}
+        - name: TPZ_DB_NAME
+          value: {{ .Values.config.database.name | quote }}
+        volumeMounts:
+        - name: config-files
+          mountPath: /topaz/conf
+        resources:
+          {{- toYaml .Values.resources | trim | nindent 10 }}
+      volumes:
+      - name: config-files
+        configMap:
+          name: {{ .Release.Name }}-configs

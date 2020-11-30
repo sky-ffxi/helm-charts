@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configs
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "topazSearch.labels" . | nindent 4 }}
+data:
+  login.conf: |
+    #Search Server Port
+    search_server_port: {{ .Values.config.ports.search }}
+
+  search_server.conf: |
+    #Topaz search server config
+
+    #--------------------------------
+    #SQL parameters
+    #--------------------------------
+
+    mysql_host:      {{ .Values.config.database.host }}
+    mysql_port:      {{ .Values.config.database.port }}
+    mysql_login:     {{ .Values.config.database.username }}
+    mysql_password:  {{ .Values.config.database.password }}
+    mysql_database:  {{ .Values.config.database.name }}
+
+    # Enabled = 1, Disabled = 0
+    expire_auctions: {{ .Values.config.expireAuctions }}
+
+    # Expire items older than this number of days
+    expire_days: {{ .Values.config.expireDays }}
+
+    # Interval is in seconds, default is one hour
+    expire_interval: {{ .Values.config.expireInterval }}
