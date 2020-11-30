@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "topazConnect.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "topazConnect.selectorLabels" . | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
+  minReadySeconds: 5
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "topazConnect.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: topaz-connect
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: data
+          containerPort: 54230
+        - name: auth
+          containerPort: 54231
+        - name: view
+          containerPort: 54001
+        env:
+        - name: TZ
+          value: {{ .Values.timezone | quote }}
+        volumeMounts:
+        - name: config-files
+          mountPath: /topaz/conf
+        resources:
+          {{- toYaml .Values.resources | trim | nindent 10 }}
+      volumes:
+      - name: config-files
+        configMap:
+          name: {{ .Release.Name }}-configs

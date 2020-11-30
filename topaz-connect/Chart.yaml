@@ -1,0 +1,6 @@
+apiVersion: v2
+name: topaz-connect
+description: A helm chart for installing topaz connect.
+type: application
+version: 0.0.1
+appVersion: 0.0.1
