@@ -12,6 +12,7 @@ service:
     data: 31230
     auth: 31231
     view: 31001
+    message: 31003
 
 resources: {}
   # limits:
@@ -29,6 +30,7 @@ config:
     data: 54230
     auth: 54231
     view: 54001
+    message: 54003
   database:
     host: localhost
     port: 3306
@@ -40,7 +42,7 @@ config:
   message:
     host: "127.0.0.1"
     port: 54003
-  logUserIP: true
+  logUserIP: false
   enableAccountCreation: true
   maintenanceMode: 0
   expectedClientVersion: "30201006_1"

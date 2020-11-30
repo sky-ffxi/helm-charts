@@ -17,5 +17,8 @@ spec:
   - name: view
     port: {{ .Values.service.ports.view }}
     targetPort: view
+  - name: message
+    port: {{ .Values.service.ports.message }}
+    targetPort: message
   selector:
     {{- include "topazConnect.selectorLabels" . | nindent 4 }}

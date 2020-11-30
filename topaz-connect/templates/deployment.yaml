@@ -29,6 +29,8 @@ spec:
           containerPort: {{ .Values.config.ports.auth }}
         - name: view
           containerPort: {{ .Values.config.ports.view }}
+        - name: message
+          containerPort: {{ .Values.config.ports.message }}
         env:
         - name: TZ
           value: {{ .Values.timezone | quote }}
