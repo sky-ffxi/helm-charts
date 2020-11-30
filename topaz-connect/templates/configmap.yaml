@@ -7,3 +7,5 @@ metadata:
     {{- include "topazConnect.labels" . | nindent 4 }}
 data:
   login.conf: | {{ .Values.configs.login | nindent 4 }}
+  maint.conf: | {{ .Values.configs.maint | nindent 4 }}
+  version.conf: | {{ .Values.configs.version | nindent 4 }}
