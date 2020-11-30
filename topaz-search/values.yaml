@@ -20,6 +20,15 @@ resources: {}
   #   memory: 128Mi
 
 config:
+  packets:
+    debugTCP: no
+    stallTime: 60
+    enableIPRules: yes
+    checkOrder: deny,allow
+    ddos:
+      interval: 3000
+      count: 5
+      autoReset: 600000
   ports:
     search: 54002
   database:
